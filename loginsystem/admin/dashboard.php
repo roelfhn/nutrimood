@@ -1,24 +1,17 @@
 <?php session_start();
-include_once('../includes/config.php');
-if (strlen($_SESSION['adminid']==0)) {
-  header('location:logout.php');
+include_once('includes/config.php');
+if (strlen($_SESSION['id'] == 0)) {
+    header('location:logout.php');
 } else {
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Admin Dashboard</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NutriMood - Dashboard</title>
+    <link rel="icon" href="./image/logo.png" type="image/png">
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Arvo'>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-    <link href="../css/styles.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
-
     <style>
         * {
             margin: 0;
@@ -28,167 +21,227 @@ if (strlen($_SESSION['adminid']==0)) {
 
         body {
             font-family: 'Arvo', serif;
-            background: linear-gradient(135deg, #e0fce4 0%, #fefefe 100%);
+            background: linear-gradient(135deg, rgb(129, 189, 138) 0%, #fefefe 100%);
             overflow-x: hidden;
-            position: relative;
-            color: #1e293b;
+            color: #333;
         }
 
-        h1.mt-4 {
-            font-weight: 700;
-            color: #334155;
-            margin-bottom: 0.5rem;
-        }
-
-        .breadcrumb {
-            background: transparent;
-            padding-left: 0;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-            color: #64748b;
-        }
-
-        .card {
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 6px rgb(100 116 139 / 0.1);
-            transition: box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 4px 12px rgb(100 116 139 / 0.2);
-        }
-
-        .card-body {
-            font-size: 1.1rem;
-            font-weight: 600;
+        .app-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 15px 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            z-index: 2;
         }
 
-        .card-footer {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-top: none;
-            padding: 0.75rem 1.25rem;
-            font-size: 0.9rem;
+        .logo-container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 15px;
         }
 
-        .card-footer a.small {
-            color: #f1f5f9;
+        .logo-image {
+            width: 70px;
+            border-radius: 10px;
+        }
+
+        .app-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #22c55e;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-button {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
             font-weight: 500;
             text-decoration: none;
+            transition: background 0.3s ease, transform 0.2s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
         }
 
-        .card-footer a.small:hover {
-            text-decoration: underline;
+        .logout-button {
+            background-color: #ff4c4c;
+            color: #fff;
         }
 
-        .bg-primary {
-            background-color: #2563eb !important;
+        .logout-button:hover {
+            background-color: #d43c3c;
+            transform: scale(1.05);
         }
 
-        .bg-primary .card-body,
-        .bg-primary .card-footer {
-            color: #ffffff !important;
+        .profile-button {
+            background-color: #22c55e;
+            color: #fff;
         }
 
-        .bg-warning {
-            background-color: #f59e0b !important;
+        .profile-button:hover {
+            background-color: #16a34a;
+            transform: scale(1.05);
         }
 
-        .bg-warning .card-body,
-        .bg-warning .card-footer {
-            color: #ffffff !important;
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        .bg-success {
-            background-color: #16a34a !important;
+        .dashboard-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: bold;
+            color: rgb(22, 150, 52);
+            margin-bottom: 10px;
         }
 
-        .bg-success .card-body,
-        .bg-success .card-footer {
-            color: #ffffff !important;
+        .dashboard-description {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 600px;
+            margin-bottom: 30px;
         }
 
-        .bg-danger {
-            background-color: #dc2626 !important;
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
         }
 
-        .bg-danger .card-body,
-        .bg-danger .card-footer {
-            color: #ffffff !important;
+        .feature-card {
+            background-color: rgb(254, 254, 254);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .card-footer .small i.fas.fa-angle-right {
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #22c55e;
+        }
+
+        .feature-description {
             font-size: 1rem;
+            color: #666;
+            margin: 10px 0 20px;
+        }
+
+        .feature-button {
+            background-color: #22c55e;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s ease, transform 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-button:hover {
+            background-color: #16a34a;
+            transform: scale(1.05);
         }
 
         @media (max-width: 768px) {
-            .container-fluid {
-                padding: 1rem;
-            }
-
-            .card-body {
-                font-size: 1rem;
+            .app-header {
                 flex-direction: column;
-                gap: 0.5rem;
                 text-align: center;
             }
 
-            .card-footer {
-                justify-content: center;
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .features-container {
+                grid-template-columns: 1fr;
             }
         }
     </style>
-
 </head>
-<body class="sb-nav-fixed">
-   <?php include_once('includes/navbar.php');?>
-    <div id="layoutSidenav">
-      <?php include_once('includes/sidebar.php');?>
-        <div id="layoutSidenav_content">
-            <main>
-                <div class="container-fluid px-4">
-                    <h1 class="mt-4">Dashboard</h1>
-                    <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Dashboard</li>
-                    </ol>
-                    <div class="row">
-<?php
-$query=mysqli_query($con,"select id from users");
-$totalusers=mysqli_num_rows($query);
-?>
+<body>
+    <header class="app-header">
+        <div class="logo-container">
+            <img src="./image/logo.jpg" alt="NutriMood Logo" class="logo-image" />
+            <h1 class="app-title">NutriMood</h1>
+        </div>
+        <div class="nav-buttons">
+            <a href="index.php" class="nav-button logout-button">Logout</a>
+            <a href="profil.php" class="nav-button profile-button">Profile</a>
+        </div>
+    </header>
 
-                        <div class="col-xl-4 col-md-6">
-                            <div class="card bg-primary text-white mb-4">
-                                <div class="card-body">Total Registered Users 
-                                    <span style="font-size:22px;"> <?php echo $totalusers;?></span></div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small" href="manage-users.php">View Details</a>
-                                    <div class="small"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php
-// Ganti 'created_at' sesuai nama kolom sebenarnya
-$query1 = mysqli_query($con, "SELECT id FROM users WHERE DATE(created_at) = CURRENT_DATE - INTERVAL 1 DAY");
+    <main class="dashboard-container">
+        <h3 class="dashboard-title">Dashboard</h3>
+        <p class="dashboard-description">
+            Your personal companion for nutrition and wellness. Choose from our
+            features below to get started.
+        </p>
 
-if (!$query1) {
-    die("Query failed: " . mysqli_error($con)); // Tampilkan pesan jika query error
-}
+        <section class="features-container">
+            <article class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h2 class="feature-title">MOodBot</h2>
+                <p class="feature-description">
+                    Get personalized nutrition advice and wellness tips.
+                </p>
+                <a href="chatbot.html" class="feature-button">Launch ChatBot</a>
+            </article>
 
-$yesterdayregusers = mysqli_num_rows($query1);
-?>
+            <article class="feature-card">
+                <div class="feature-icon">😊</div>
+                <h2 class="feature-title">MoodTracker</h2>
+                <p class="feature-description">
+                    Track and analyze your daily mood patterns.
+                </p>
+                <a href="moodtracker.php" class="feature-button">Launch MoodTracker</a>
+            </article>
 
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="../js/scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-    <script src="../js/datatables-simple-demo.js"></script>
+            <article class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <h2 class="feature-title">NutriCatch</h2>
+                <p class="feature-description">
+                    Learn about nutrition through fun mini-games.
+                </p>
+                <a href="nutricatch.html" class="feature-button">Launch NutriCatch</a>
+            </article>
+        </section>
+    </main>
 </body>
 </html>
 <?php } ?>

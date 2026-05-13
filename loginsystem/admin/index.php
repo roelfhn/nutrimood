@@ -1,225 +1,206 @@
-<?php
-session_start();
-include_once('../includes/config.php');
-
-// Code for login
-if (isset($_POST['login'])) {
-    $adminusername = $_POST['username'];
-    $pass = md5($_POST['password']);
-    $ret = mysqli_query($con, "SELECT * FROM admin WHERE username='$adminusername' and password='$pass'");
-    $num = mysqli_fetch_array($ret);
-    if ($num > 0) {
-        $_SESSION['login'] = $_POST['username'];
-        $_SESSION['adminid'] = $num['id'];
-        echo "<script>window.location.href='dashboard.php'</script>";
-        exit();
-    } else {
-        echo "<script>alert('Invalid username or password');</script>";
-        echo "<script>window.location.href='index.php'</script>";
-        exit();
-    }
-}
-?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="utf-8" />
-    <title>Admin Login</title>
-    <link rel="icon" href="../image/logo.png" type="image/png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href='https://fonts.googleapis.com/css?family=Arvo' rel='stylesheet'>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Choose your move!</title>
+  <link rel="icon" href="./image/logo.png" type="image/png">
 
-        body {
-            font-family: 'Arvo', serif;
-            background: linear-gradient(135deg,rgb(189, 206, 56) 0%, #fefefe 100%);
-            color: white;
-            min-height: 100vh;
-            overflow: hidden;
-        }
+  <!-- ICONSCOUT Icons -->
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css" />
 
-        .container {
-            display: flex;
-            height: 100vh;
-            width: 100%;
-        }
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Arvo'>
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arvo', serif;
+      background: linear-gradient(135deg,rgb(146, 216, 156) 0%, #fefefe 100%);
+      color: #333;
+    }
 
-        .left-panel {
-            width: 50%;
-            background-color:linear-gradient(135deg,rgb(45, 139, 59) 0%, #fefefe 100%);;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            text-align: center;
-        }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 
-        .left-panel img {
-             width: 100%;
-            max-width: 200px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-        }
+    .header a {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
 
-        .left-panel h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
+    .header img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
 
-        .left-panel p {
-            font-size: 1rem;
-            color: #1f2449;
-        }
+    .header .brand-name {
+      font-size: 28px;
+      font-weight: bold;
+      color: #22c55e;
+      margin: 0;
+    }
 
-        .right-panel {
-            width: 50%;
-            background-color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 20px;
-            overflow-y: auto;
-        }
+    .header a:hover .brand-name {
+      color: #16a34a;
+    }
 
-        .login-container {
-            background: white;
-            color: #1f2449;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-            max-width: 400px;
-            width: 100%;
-        }
+    .content {
+      text-align: center;
+      padding: 50px 20px;
+    }
 
-        h2, h3 {
-            text-align: center;
-            color: #1f2449;
-            margin-bottom: 10px;
-        }
+    .content h1 {
+      font-size: 40px;
+      margin-bottom: 40px;
+      color: #1a1b47;
+    }
 
-        form {
-            margin-top: 20px;
-        }
+    .menu-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 20px;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .menu-item {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s, box-shadow 0.3s;
+      overflow: hidden;
+      cursor: pointer;
+      text-align: center;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 500px;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-            color: #333;
-        }
+    .menu-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    }
 
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 1rem;
-        }
+    .menu-item .icon {
+      width: 100%;
+      height: 250px;
+      background-color: #d4fcd9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .menu-item .icon img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+    }
 
-        .actions a {
-            font-size: 0.9rem;
-            color: #4caf50;
-            text-decoration: none;
-        }
+    .menu-item h3 {
+      font-size: 24px;
+      color: #22c55e;
+      margin: 20px 0 10px;
+    }
 
-        button {
-            padding: 10px 20px;
-            background-color: rgb(45, 139, 59);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-        }
+    .menu-item p {
+      font-size: 16px;
+      color: #555;
+      margin: 0 20px 20px;
+    }
 
-        button:hover {
-            background-color: #14182f;
-        }
+    .menu-item .play-button {
+      padding: 10px 20px;
+      background-color: #22c55e;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      border-radius: 10px;
+      display: inline-block;
+      transition: background-color 0.3s;
+      margin-top: auto;
+    }
 
-        .footer-links {
-            text-align: center;
-            margin-top: 20px;
-        }
+    .menu-item .play-button:hover {
+      background-color: #16a34a;
+    }
 
-        .footer-links a {
-            color: #666;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
-        .footer-links a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-
-            .left-panel,
-            .right-panel {
-                width: 100%;
-                height: auto;
-            }
-
-            .left-panel img {
-                max-width: 150px;
-            }
-
-            .login-container {
-                padding: 20px;
-                margin-top: 20px;
-            }
-        }
-    </style>
+    .gif-image {
+      width: 250px;
+      height: auto;
+      margin: 5px auto;
+      display: block;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="left-panel">
-            <img src="../image/A.gif" alt="Admin Login" />
-            <h2>Welcome back, MOodMaster!</h2>
-            <p>Ayo atur rasa dan suasana.</p>
+
+  <!-- Background Music -->
+  <audio autoplay loop>
+    <source src="./music/doodle.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Header -->
+  <div class="header">
+    <a href="../index.html">
+      <img src="./image/logo.png" alt="NutriMOod Logo">
+      <h1 class="brand-name">NutriMOod</h1>
+    </a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <div class="menu-container">
+
+      <!-- Registrasi Section -->
+      <div class="menu-item">
+        <div class="icon">
+          <img src="image/B.gif" alt="Signup GIF" class="gif-image">
         </div>
-        <div class="right-panel">
-            <div class="login-container">
-                <h2>NutriMood Admin</h2>
-                <h3>Login Panel</h3>
-                <form method="post">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input name="username" type="text" placeholder="Enter your username" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input name="password" type="password" placeholder="Enter your password" required />
-                    </div>
-                    <div class="actions">
-                        <a href="password-recovery.php">Forgot Password?</a>
-                        <button name="login" type="submit">Login</button>
-                    </div>
-                </form>
-                <div class="footer-links">
-                    <a href="../index.php">← Back to Home Page</a>
-                </div>
-            </div>
+        <h3>Register</h3>
+        <p>Yuk gabung dan mulai hidup sehat bersama NutriMood! Daftarkan dirimu untuk petualangan seru dan bergizi! 💚</p>
+        <a href="signup.php" class="play-button">Register Now</a>
+      </div>
+
+      <!-- Login Section -->
+      <div class="menu-item">
+        <div class="icon">
+          <img src="image/D.gif" alt="Login GIF" class="gif-image">
         </div>
+        <h3> Login</h3>
+        <p>Sudah punya akun? Masuk dan lanjutkan perjalanan bahagia & seimbangmu hari ini! ✨</p>
+        <a href="login.php" class="play-button">Login Here</a>
+      </div>
+
+      <!-- Admin Section -->
+      <div class="menu-item">
+        <div class="icon">
+          <img src="image/A.gif" alt="Admin GIF" class="gif-image">
+        </div>
+        <h3> Admin</h3>
+        <p>Kelola pengguna, data, dan semangat positif komunitas kita dengan cerdas dan bijak! 🌱</p>
+        <a href="admin/index.php" class="play-button">Admin Only!</a>
+      </div>
+
     </div>
+  </div>
+
 </body>
 </html>
