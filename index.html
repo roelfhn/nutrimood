@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NutriMOod</title>
+  <link rel="icon" href="../NutriMOod/loginsystem/image/logo.png" type="image/png" />
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Arvo'>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arvo', serif;
+      background: linear-gradient(135deg, #e0fce4 0%, #fefefe 100%);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Decorative bubbles */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.15;
+      z-index: 0;
+    }
+
+    .bubble1 {
+      width: 120px;
+      height: 120px;
+      background: #22c55e;
+      top: 20%;
+      left: -60px;
+    }
+
+    .bubble2 {
+      width: 200px;
+      height: 200px;
+      background: #a3e635;
+      bottom: 10%;
+      right: -100px;
+    }
+
+    .bubble3 {
+      width: 80px;
+      height: 80px;
+      background: #bef264;
+      top: 60%;
+      left: 20%;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-name {
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: bold;
+      color: #22c55e;
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      position: relative;
+    }
+
+    .brand-name::after {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 3px;
+      background-color: #22c55e;
+      margin: 10px auto 0;
+      border-radius: 5px;
+    }
+
+      .gif-image {
+      width: 290px; /* diperbesar dari 400px */
+      height: auto;
+      margin: 5px auto;
+      display: block;
+    }
+
+
+    .page_404 {
+      text-align: center;
+    }
+
+    .contant_box_404 {
+      color: #22c55e;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    .contant_box_404 h3 {
+      font-size: 30px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .decoration-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #a3e635;
+      display: inline-block;
+    }
+
+    .contant_box_404 p {
+      font-size: 18px;
+      color: #666;
+      max-width: 600px;
+      margin: 10px auto 20px;
+    }
+
+    .link_404 {
+      color: #fff;
+      padding: 12px 24px;
+      background: #39ac31;
+      margin: 20px 0;
+      display: inline-block;
+      font-size: 16px;
+      border-radius: 6px;
+      transition: background 0.3s ease, transform 0.2s ease;
+      text-decoration: none;
+    }
+
+    .link_404:hover {
+      background: #2e8b2e;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .brand-name {
+        font-size: clamp(1.8rem, 6vw, 3rem);
+        margin-top: 20px;
+      }
+
+      .gif-image {
+        width: 100%;
+      }
+
+      .contant_box_404 h3 {
+        font-size: 26px;
+      }
+
+      .contant_box_404 p {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .brand-name {
+        font-size: clamp(1.5rem, 7vw, 2.5rem);
+      }
+
+      .contant_box_404 h3 {
+        font-size: 22px;
+      }
+
+      .contant_box_404 p {
+        font-size: 14px;
+      }
+
+      .link_404 {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Decorative bubbles -->
+  <div class="bubble bubble1"></div>
+  <div class="bubble bubble2"></div>
+  <div class="bubble bubble3"></div>
+
+  <div class="landing-page">
+    <div class="main-container">
+
+      <section class="page_404">
+        <div class="container">
+          <img src="./loginsystem/image/logo.png" alt="Purba GIF" class="gif-image" />
+
+          <div class="contant_box_404">
+            <h3><span class="decoration-icon">🌿</span>Start Your Journey</h3>
+            <p>Track your nutrition, understand your mood patterns, and connect with experienced nutritionists for personalized wellness guidance that fits your lifestyle.</p>
+            <a href="./loginsystem/" class="link_404">Let's Go</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
